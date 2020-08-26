@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -57,7 +58,10 @@ class SelectedThingsFragment : Fragment() {
         selectedThingsRecyclerView.itemAnimator = DefaultItemAnimator()
 
         adapter = CountriesAdapter(requireContext()) { country ->
-            choosenItemLayout.findViewById<TextView>(R.id.tvSelected).text = "${country.name}"
+            val text=choosenItemLayout.findViewById<TextView>(R.id.tvSelected)
+                text.text= "${country.name}"
+            val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.bounce)
+            text.startAnimation(animation)
         }
         adapter.isMultiSelectionAllowed = false
 
