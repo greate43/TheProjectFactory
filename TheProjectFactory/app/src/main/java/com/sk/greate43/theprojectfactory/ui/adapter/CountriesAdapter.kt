@@ -34,7 +34,7 @@ class CountriesAdapter(context: Context, val callback: (Countries) -> Unit) :
 
     override fun onBindViewHolder(holder: CountriesHolder, position: Int) {
         holder.bind(context = mContext, countries = data[position])
-        if(position == selectedItemPos)
+        if (position == selectedItemPos)
             holder.countryName.visibility = View.GONE
         else
             holder.countryName.visibility = View.VISIBLE
@@ -60,18 +60,21 @@ class CountriesAdapter(context: Context, val callback: (Countries) -> Unit) :
                     )
                 }
             } else {
-
-                selectedItemPos = position
-                if(lastItemSelectedPos == -1)
-                    lastItemSelectedPos = selectedItemPos
-                else {
-                    notifyItemChanged(lastItemSelectedPos)
-                    lastItemSelectedPos = selectedItemPos
-                }
-                notifyItemChanged(selectedItemPos)
+                singleItemSelection(position)
             }
         }
 
+    }
+
+    private fun singleItemSelection(position: Int) {
+        selectedItemPos = position
+        if (lastItemSelectedPos == -1)
+            lastItemSelectedPos = selectedItemPos
+        else {
+            notifyItemChanged(lastItemSelectedPos)
+            lastItemSelectedPos = selectedItemPos
+        }
+        notifyItemChanged(selectedItemPos)
     }
 
 
@@ -79,6 +82,10 @@ class CountriesAdapter(context: Context, val callback: (Countries) -> Unit) :
         return selectedItem
     }
 
+    fun setPreSelectedItem(selected: Int) {
+        callback(data[selected])
+        singleItemSelection(selected)
+    }
 
     // this is will set the data to the list view
     fun setData(newData: ArrayList<Countries>) {

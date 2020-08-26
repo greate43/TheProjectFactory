@@ -15,6 +15,7 @@ import com.sk.greate43.theprojectfactory.R
 import com.sk.greate43.theprojectfactory.service.model.Countries
 import com.sk.greate43.theprojectfactory.ui.adapter.CountriesAdapter
 import kotlinx.android.synthetic.main.fragment_selected_things.*
+import kotlin.random.Random
 
 
 private const val ARG_PARAM1 = "param1"
@@ -23,6 +24,7 @@ private const val ARG_PARAM1 = "param1"
 class SelectedThingsFragment : Fragment() {
     private var selectedList: ArrayList<Countries>? = null
     private var callback: OnSelectedStateListener? = null
+    private var randomSelection = 0
     val TAG = SelectedThingsFragment::class.java.simpleName
     fun setOnSelectedStateListener(callback: OnSelectedStateListener) {
         this.callback = callback
@@ -37,6 +39,7 @@ class SelectedThingsFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             selectedList = it.getParcelableArrayList(ARG_PARAM1)
+            randomSelection = (0..it.size()).random()
         }
     }
 
@@ -59,7 +62,7 @@ class SelectedThingsFragment : Fragment() {
         selectedThingsRecyclerView.itemAnimator = DefaultItemAnimator()
 
         adapter = CountriesAdapter(requireContext()) { country ->
-            tvSelected.text ="Chosen Country :\n${country.name}"
+            tvSelected.text = "Chosen Country :\n${country.name}"
         }
         adapter.isMultiSelectionAllowed = false
 
@@ -72,6 +75,8 @@ class SelectedThingsFragment : Fragment() {
         Log.d(TAG, "name ${selectedList?.get(0)?.name}")
 
         selectedList?.let { adapter.setData(it) }
+//        selectedThingsRecyclerView.findViewHolderForAdapterPosition(randomSelection)?.itemView?.performClick()
+        adapter.setPreSelectedItem(randomSelection)
     }
 
     companion object {
