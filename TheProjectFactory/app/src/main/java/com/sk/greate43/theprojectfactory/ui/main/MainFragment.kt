@@ -55,12 +55,14 @@ class MainFragment : Fragment() {
 
         footer.findViewById<Button>(R.id.btnNext).setOnClickListener {
             if (countriesForView.size >= 3) {
+                //oops forgot to pass selected only :D
+                val selected = countriesForView.filter { it.isSelected } as ArrayList<Country>
                 requireActivity().supportFragmentManager.beginTransaction().setCustomAnimations(
                     R.anim.slide_in,
                     R.anim.fade_out,
                     R.anim.fade_in,
                     R.anim.slide_out
-                ).replace(R.id.container, SelectedThingsFragment.newInstance(countriesForView))
+                ).replace(R.id.container, SelectedThingsFragment.newInstance(selected))
                     .commitNow()
             } else {
                 showSnackBar("Select At Least Select 3 Items")

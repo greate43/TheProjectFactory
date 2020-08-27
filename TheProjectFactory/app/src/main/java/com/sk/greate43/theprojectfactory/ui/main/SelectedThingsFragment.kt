@@ -24,10 +24,14 @@ private const val ARG_PARAM1 = "param1"
 class SelectedThingsFragment : Fragment() {
     val TAG = SelectedThingsFragment::class.java.simpleName
 
+    private val selectedList: ArrayList<Country> = ArrayList()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        arguments?.let {
+            selectedList.addAll(it.getParcelableArrayList(ARG_PARAM1)!!)
+        }
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_selected_things, container, false)
     }
@@ -41,21 +45,15 @@ class SelectedThingsFragment : Fragment() {
         selectedThingsRecyclerView.layoutManager = llm
         selectedThingsRecyclerView.itemAnimator = DefaultItemAnimator()
 
-        val selectedList: ArrayList<Country> = ArrayList()
-        arguments?.let {
-            selectedList.addAll(it.getParcelableArrayList(ARG_PARAM1)!!)
-        }
-
-        val adapter = CountriesAdapter(selectedList!!) { country ->
+        val adapter = CountriesAdapter(selectedList) { country ->
             val text=choosenItemLayout.findViewById<TextView>(R.id.tvSelected)
-                text.text= "${country.name}"
+            text.text= "${country.name}"
             val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.bounce)
             text.startAnimation(animation)
         }
+        selectedThingsRecyclerView.adapter = adapter
         adapter.isMultiSelectionAllowed = false
 
-
-        selectedThingsRecyclerView.adapter = adapter
 
         selectedFooter.findViewById<Button>(R.id.btnPrevious).setOnClickListener {
             requireActivity().supportFragmentManager.beginTransaction().setCustomAnimations(
@@ -70,7 +68,7 @@ class SelectedThingsFragment : Fragment() {
 
 //        selectedThingsRecyclerView.findViewHolderForAdapterPosition(randomSelection)?.itemView?.performClick()
         adapter.clearSelect()
-        adapter.select((0..selectedList.size).random())
+        adapter.select((0 until selectedList.size).random())
     }
 
 

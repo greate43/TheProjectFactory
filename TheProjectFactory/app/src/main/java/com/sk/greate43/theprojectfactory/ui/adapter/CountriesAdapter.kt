@@ -44,7 +44,6 @@ class CountriesAdapter(private val data: List<Country>, val callback: (Country) 
             } else {
                 clearSelect()
                 select(position)
-                callback(data[position])
             }
             //no need for all of this:
 //            if (!selectedItem.contains(data[position])) {
@@ -70,6 +69,7 @@ class CountriesAdapter(private val data: List<Country>, val callback: (Country) 
 
     fun select(position: Int){
         data[position].isSelected = !data[position].isSelected
+        callback(data[position])
         notifyItemChanged(position)
     }
 
